@@ -7,7 +7,7 @@ namespace PlayerCtrl
     public partial class Player
     {
         /// <summary> 컴포넌트 초기화. <para> 스크립트도 불러옴 </para> </summary>
-        private void StartComponents()
+        private void Start_Components()
         {
             drawGizmos = GetComponent<DrawGizmos>();
             playerInput = GetComponent<PlayerInput>();
@@ -17,7 +17,7 @@ namespace PlayerCtrl
             bc = GetComponent<BoxCollider2D>();
         }
         /// <summary> 초기 설정. <para> Rigidbody2D 초기화 </para> </summary>
-        private void StartSetting()
+        private void Start_Rigid2D_Set()
         {
             rb.velocity = Vector2.zero;                                                             // 속도 초기화
             rb.gravityScale = 2f;                                                                   // 중력 설정
@@ -26,17 +26,21 @@ namespace PlayerCtrl
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;                        // 충돌 감지 설정
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;                                // 보간 설정
         }
-        /// <summary> Movement 초기 변수 설정. <para> HitBox 크기 등 설정 </para> </summary>
-        private void StartMovementSetting()
+        /// <summary> 초기 설정. <para> BoxCast 변수 초기화 </para> </summary>
+        private void Start_BoxCast_Set()
         {
-            jumpForce = 10f;
-            Cooldown = 0.05f;
-            col_x = bc.size.x;
-            col_y = bc.size.y;
-            boxLength = 0.05f;
-            boxMaxDist = 2.0f;
-            boxHorizontalSize = new Vector2(boxLength, col_y);
-            boxVerticalSize = new Vector2(col_x, boxLength);
+            col_x = bc.size.x;                                  // BoxCollider2D의 x축 길이
+            col_y = bc.size.y;                                  // BoxCollider2D의 y축 길이
+            Cooldown = 0.05f;                                   // 해당 시간동안 BoxCast를 사용하지 않음
+            boxLength = 0.05f;                                  // BoxCast의 길이
+            boxMaxDist = 2.0f;                                  // BoxCast를 판별하는 최대 거리
+            boxHorizontalSize = new Vector2(col_x, boxLength);      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
+            boxVerticalSize = new Vector2(boxLength, col_y);        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
+        }
+        /// <summary> 초기 설정. <para> Movement 변수 초기화 </para> </summary>
+        private void Start_Movement_Set()
+        {
+            jumpForce = 15f;
         }
     }
 }

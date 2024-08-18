@@ -205,7 +205,7 @@ Transform:
   m_GameObject: {fileID: 6324765}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.61, y: 0.35, z: 0}
+  m_LocalPosition: {x: 3.24, y: 1.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -254,7 +254,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.534, y: 1.878}
+  m_Size: {x: 1.53, y: 1.77}
   m_EdgeRadius: 0
 --- !u!50 &6324769
 Rigidbody2D:
@@ -308,6 +308,10 @@ MonoBehaviour:
       m_Bits: 1024
   drawGizmos: {fileID: 0}
   playerInput: {fileID: 0}
+  isDownTouch: 0
+  isLeftTouch: 0
+  isRightTouch: 0
+  isUpTouch: 0
 --- !u!114 &6324771
 MonoBehaviour:
   m_ObjectHideFlags: 0

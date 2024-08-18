@@ -12,14 +12,13 @@ public class DrawGizmos : MonoBehaviour
     }
 
     /// <summary> 인스턴스의 좌우 충돌 박스를 표현. </summary>
-    public void DrawHorizontalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, float vertical, float boxLength, float maxBoxDistance, bool right)
+    public void DrawHorizontalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 boxSize, float col_x, float boxLength, float maxBoxDistance, bool right)
     {
         Vector2 direction = right ? Vector2.right : Vector2.left;
-        Vector2 boxSize = new(boxLength, vertical);
 
         if (hitbox.collider != null)
         {
-            if (hitbox.distance <= vertical * 0.5f + boxLength * 1.5f)
+            if (hitbox.distance <= col_x * 0.5f + boxLength * 1.5f)
                 Gizmos.color = Color.red;
             else
                 Gizmos.color = Color.yellow;
@@ -34,14 +33,13 @@ public class DrawGizmos : MonoBehaviour
         }
     }
     /// <summary> 인스턴스의 상하 충돌 박스를 표현. </summary>
-    public void DrawVerticalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, float horizontal, float boxLength, float maxBoxDistance, bool up)
+    public void DrawVerticalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 boxSize, float col_y, float boxLength, float maxBoxDistance, bool up)
     {
         Vector2 direction = up ? Vector2.up : Vector2.down;
-        Vector2 boxSize = new(horizontal, boxLength);
 
         if (hitbox.collider != null)
         {
-            if (hitbox.distance <= horizontal * 0.5f + boxLength * 1.5f)
+            if (hitbox.distance <= col_y * 0.5f + boxLength * 1.5f)
                 Gizmos.color = Color.red;
             else
                 Gizmos.color = Color.yellow;

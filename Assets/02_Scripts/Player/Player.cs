@@ -31,15 +31,16 @@ namespace PlayerCtrl
 
     public partial class Player : MonoBehaviour
     {
-        public bool IsPlayer1p { get { return settings.isPlayer1p; } }      // 1P or 2P
-        public bool HideGizmos { get { return settings.hideGizmos; } }      // Gizmos Draw 여부
+        private bool IsPlayer1p { get { return settings.isPlayer1p; } }      // 1P or 2P
+        private bool HideGizmos { get { return settings.hideGizmos; } }      // Gizmos Draw 여부
 
         //----------------------------------------------------------------------------------//
         void Awake()                        // void Awake()
         {
-            StartComponents();
-            StartSetting();
-            StartMovementSetting();
+            Start_Components();
+            Start_Rigid2D_Set();
+            Start_BoxCast_Set();
+            Start_Movement_Set();
         }
         void Start()                        // void Start()
         {
@@ -53,17 +54,16 @@ namespace PlayerCtrl
         {
             GetValueUpdate();
             JumpUpdate();
-            CoolTimersUpdate();
-            
-            BoxDownCast();
-            BoxLeftCast();
-            BoxRightCast();
-            BoxUpCast();
 
-            DownPosLock();
-            LeftPosLock();
-            RightPosLock();
-            UpPosLock();
+            CoolTimersUpdate();
+            BoxVerticalCast(ref hitboxUp, ref upCoolTimer, ref isUpTouch, true);
+            BoxVerticalCast(ref hitboxDown, ref downCoolTimer, ref isDownTouch, false);
+            BoxHorizontalCast(ref hitboxRight, ref rightCoolTimer, ref isRightTouch, true);
+            BoxHorizontalCast(ref hitboxLeft, ref leftCoolTimer, ref isLeftTouch, false);
+            VerticalPosLock(hitboxUp, ref isUpTouch, true);
+            VerticalPosLock(hitboxDown, ref isDownTouch, false);
+            HorizontalPosLock(hitboxRight, ref isRightTouch, true);
+            HorizontalPosLock(hitboxLeft, ref isLeftTouch, false);
         }
         //----------------------------------------------------------------------------------//
 
@@ -74,20 +74,14 @@ namespace PlayerCtrl
             vertical = IsPlayer1p ? playerInput.Vertical_1p : playerInput.Vertical_2p;          // 1P 2P에 따라 입력값을 받아옴
         }
 
-        private void MoveUpdate()               // 아직 테스트중
-        {
-            //if (horizontal != 0)
-            rb.velocity = new Vector2(horizontal * 10f, rb.velocity.y);
-        }
-
         private void OnDrawGizmos()             // Gizmos 표현
         {
             if (HideGizmos || !Application.isPlaying || drawGizmos == null) return;
             drawGizmos.DrawVectorGizmos(tr, rb.velocity, Color.blue);
-            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxRight, col_y, boxLength, boxMaxDist, true);
-            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxLeft, col_y, boxLength, boxMaxDist, false);
-            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxUp, col_x, boxLength, boxMaxDist, true);
-            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxDown, col_x, boxLength, boxMaxDist, false);
+            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxRight, boxVerticalSize, col_x, boxLength, boxMaxDist, true);
+            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxLeft, boxVerticalSize, col_x, boxLength, boxMaxDist, false);
+            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxUp, boxHorizontalSize, col_y, boxLength, boxMaxDist, true);
+            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxDown, boxHorizontalSize, col_y, boxLength, boxMaxDist, false);
         }
     }
 }
