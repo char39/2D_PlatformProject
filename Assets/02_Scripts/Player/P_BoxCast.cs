@@ -6,6 +6,8 @@ namespace PlayerCtrl
 {
     public partial class Player
     {
+        private float originGravityScale;       // 초기 중력 설정값 저장
+
         private float Cooldown;                 // 해당 시간동안 BoxCast를 사용하지 않음
 
         private float downCoolTimer;            // 아래쪽 BoxCast 타이머 갱신
@@ -63,7 +65,7 @@ namespace PlayerCtrl
                 transform.position = new Vector2(transform.position.x, y);
             }
             else
-                rb.gravityScale = up ? rb.gravityScale : 2.0f;
+                rb.gravityScale = up ? rb.gravityScale : originGravityScale;
         }
         /// <summary> BoxCast를 사용하여 충돌 감지. <para> true = right, false = left </para> </summary>
         private void BoxHorizontalCast(ref RaycastHit2D hitbox, ref float coolTimer, ref bool isTouch, bool right)

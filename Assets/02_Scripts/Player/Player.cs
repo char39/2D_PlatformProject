@@ -56,14 +56,14 @@ namespace PlayerCtrl
             JumpUpdate();
 
             CoolTimersUpdate();
-            BoxVerticalCast(ref hitboxUp, ref upCoolTimer, ref isUpTouch, true);
-            BoxVerticalCast(ref hitboxDown, ref downCoolTimer, ref isDownTouch, false);
-            BoxHorizontalCast(ref hitboxRight, ref rightCoolTimer, ref isRightTouch, true);
-            BoxHorizontalCast(ref hitboxLeft, ref leftCoolTimer, ref isLeftTouch, false);
-            VerticalPosLock(hitboxUp, ref isUpTouch, true);
-            VerticalPosLock(hitboxDown, ref isDownTouch, false);
-            HorizontalPosLock(hitboxRight, ref isRightTouch, true);
-            HorizontalPosLock(hitboxLeft, ref isLeftTouch, false);
+            BoxVerticalCast(ref hitboxUp, ref upCoolTimer, ref isUpTouch, true);                // 위쪽 BoxCast
+            BoxVerticalCast(ref hitboxDown, ref downCoolTimer, ref isDownTouch, false);         // 아래쪽 BoxCast
+            BoxHorizontalCast(ref hitboxRight, ref rightCoolTimer, ref isRightTouch, true);     // 오른쪽 BoxCast
+            BoxHorizontalCast(ref hitboxLeft, ref leftCoolTimer, ref isLeftTouch, false);       // 왼쪽 BoxCast
+            VerticalPosLock(hitboxUp, ref isUpTouch, true);                                 // 위쪽 BoxCast 위치 고정
+            VerticalPosLock(hitboxDown, ref isDownTouch, false);                            // 아래쪽 BoxCast 위치 고정
+            HorizontalPosLock(hitboxRight, ref isRightTouch, true);                         // 오른쪽 BoxCast 위치 고정
+            HorizontalPosLock(hitboxLeft, ref isLeftTouch, false);                          // 왼쪽 BoxCast 위치 고정
         }
         //----------------------------------------------------------------------------------//
 
