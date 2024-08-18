@@ -135,8 +135,8 @@ GameObject:
   - component: {fileID: 6324769}
   - component: {fileID: 6324768}
   - component: {fileID: 6324770}
+  - component: {fileID: 6324773}
   - component: {fileID: 6324771}
-  - component: {fileID: 6324772}
   m_Layer: 10
   m_Name: Player1p
   m_TagString: Player
@@ -205,7 +205,7 @@ Transform:
   m_GameObject: {fileID: 6324765}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.214, y: -0.375, z: 0}
+  m_LocalPosition: {x: 4.61, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -254,7 +254,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.734375, y: 2.078125}
+  m_Size: {x: 1.534, y: 1.878}
   m_EdgeRadius: 0
 --- !u!50 &6324769
 Rigidbody2D:
@@ -271,7 +271,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -296,6 +296,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0}
+  settings:
+    isPlayer1p: 1
+    hideGizmos: 0
   layer:
     Block:
       serializedVersion: 2
@@ -303,10 +306,8 @@ MonoBehaviour:
     Player:
       serializedVersion: 2
       m_Bits: 1024
+  drawGizmos: {fileID: 0}
   playerInput: {fileID: 0}
-  playerMovement: {fileID: 0}
-  isPlayer1p: 1
-  HideGizmos: 0
 --- !u!114 &6324771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,7 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6931679a8f042f43936127575e57354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6324772
+--- !u!114 &6324773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -328,12 +329,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6324765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1413d06044a49ad45bcdef35f6099873, type: 3}
+  m_Script: {fileID: 11500000, guid: 189acb4ac035968458ef2d16929cd478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1 &6863683
 GameObject:
   m_ObjectHideFlags: 0

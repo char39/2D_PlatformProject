@@ -2,87 +2,176 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace PlayerCtrl
 {
-    private float rayLength = 1.05f;
-    public LayerMask groundLayer;
-    private float jumpForce = 10f;
-    private float jumpCooldown = 0.05f; // 쿨다운 시간
-    private bool isGrounded;
-    private Rigidbody2D rb;
-    private float jumpCooldownTimer;
-    public RaycastHit2D hit;
-
-    public RaycastHit2D hitbox;
-    private float boxCastMaxDistance = 2.0f;
-    private Vector2 boxCastSize = new Vector2(1.7f, 0.05f);
-
-    void Start()
+    public partial class Player
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        private float jumpForce;
+        private float Cooldown;
 
-    void Update()           // 아직 테스트중
-    {
-        GroundBoxCast();
-        Jump();
-        GroundPosLock();
-    }
+        private float downCoolTimer;
+        private float leftCoolTimer;
+        private float rightCoolTimer;
+        private float upCoolTimer;
 
-    private void GroundBoxCast()
-    {
-        if (jumpCooldownTimer > 0)                  // 쿨다운 타이머 업데이트
-            jumpCooldownTimer -= Time.deltaTime;
+        private bool isDownTouch;
+        private bool isLeftTouch;
+        private bool isRightTouch;
+        private bool isUpTouch;
 
-        if (jumpCooldownTimer <= 0)                 // 쿨다운 시간이 0일 때만 바닥 감지
+        private float col_x;
+        private float col_y;
+
+        private float boxLength;
+
+        private Vector2 boxVerticalSize;
+        private Vector2 boxHorizontalSize;
+
+        private float boxMaxDist;
+
+        public RaycastHit2D hitboxDown;
+        public RaycastHit2D hitboxLeft;
+        public RaycastHit2D hitboxRight;
+        public RaycastHit2D hitboxUp;
+
+
+
+        private void BoxDownCast()
         {
-            hitbox = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, groundLayer);
-
-            if (hitbox.collider != null)
+            if (downCoolTimer > 0)                  // 쿨다운 타이머 업데이트
+                downCoolTimer -= Time.deltaTime;
+            if (downCoolTimer <= 0)                 // 쿨다운 시간이 0일 때만 바닥 감지
             {
-                if (hitbox.distance <= 1.05f)
-                    isGrounded = true;
+                hitboxDown = Physics2D.BoxCast(transform.position, boxVerticalSize, 0f, Vector2.down, boxMaxDist, layer.Block);
+                if (hitboxDown.collider != null)
+                {
+                    if (hitboxDown.distance <= col_y * 0.5f + boxLength * 1.5f)
+                        isDownTouch = true;
+                    else
+                        isDownTouch = false;
+                }
                 else
-                    isGrounded = false;
+                    isDownTouch = false;
+            }
+        }
+        private void DownPosLock()
+        {
+            if (isDownTouch)                             // 바닥에 있을 때만 위치 고정
+            {
+                rb.gravityScale = 0;
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                transform.position = new Vector2(transform.position.x, hitboxDown.point.y + (col_y * 0.5f + boxLength * 2f));
             }
             else
-                isGrounded = false;
+                rb.gravityScale = 2;
         }
-    }
-    private void Jump()
-    {
-        if (Input.GetButtonDown("Jump") && isGrounded)      // 점프 처리
+        private void BoxLeftCast()
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            isGrounded = false;                                 // 점프 시 바닥 고정 해제
-            jumpCooldownTimer = jumpCooldown;                   // 쿨다운 타이머 시작
+            if (leftCoolTimer > 0)
+                leftCoolTimer -= Time.deltaTime;
+            if (leftCoolTimer <= 0)
+            {
+                hitboxLeft = Physics2D.BoxCast(transform.position, boxHorizontalSize, 0f, Vector2.left, boxMaxDist, layer.Block);
+                if (hitboxLeft.collider != null)
+                {
+                    if (hitboxLeft.distance <= col_x * 0.5f + boxLength * 1.5f)
+                        isLeftTouch = true;
+                    else
+                        isLeftTouch = false;
+                }
+                else
+                    isLeftTouch = false;
+            }
         }
-    }
-    private void GroundPosLock()
-    {
-        if (isGrounded)                             // 바닥에 있을 때만 위치 고정
+        private void LeftPosLock()
         {
-            rb.gravityScale = 0;
-            rb.velocity = new Vector2(rb.velocity.x, 0f);
-            transform.position = new Vector2(transform.position.x, hitbox.point.y + 1.039f);
+            if (isLeftTouch)
+            {
+                rb.velocity = new Vector2(0f, rb.velocity.y);
+                transform.position = new Vector2(hitboxLeft.point.x + (col_x * 0.5f + boxLength * 2f), transform.position.y);
+            }
         }
-        else
-            rb.gravityScale = 2;
-    }
+        private void BoxRightCast()
+        {
+            if (rightCoolTimer > 0)
+                rightCoolTimer -= Time.deltaTime;
+            if (rightCoolTimer <= 0)
+            {
+                hitboxRight = Physics2D.BoxCast(transform.position, boxHorizontalSize, 0f, Vector2.right, boxMaxDist, layer.Block);
+                if (hitboxRight.collider != null)
+                {
+                    if (hitboxRight.distance <= col_x * 0.5f + boxLength * 1.5f)
+                        isRightTouch = true;
+                    else
+                        isRightTouch = false;
+                }
+                else
+                    isRightTouch = false;
+            }
+        }
+        private void RightPosLock()
+        {
+            if (isRightTouch)
+            {
+                rb.velocity = new Vector2(0f, rb.velocity.y);
+                transform.position = new Vector2(hitboxRight.point.x - (col_x * 0.5f + boxLength * 2f), transform.position.y);
+            }
+        }
+        private void BoxUpCast()
+        {
+            if (upCoolTimer > 0)
+                upCoolTimer -= Time.deltaTime;
+            if (upCoolTimer <= 0)
+            {
+                hitboxUp = Physics2D.BoxCast(transform.position, boxVerticalSize, 0f, Vector2.up, boxMaxDist, layer.Block);
+                if (hitboxUp.collider != null)
+                {
+                    if (hitboxUp.distance <= col_y * 0.5f + boxLength * 1.5f)
+                        isUpTouch = true;
+                    else
+                        isUpTouch = false;
+                }
+                else
+                    isUpTouch = false;
+            }
+        }
+        private void UpPosLock()
+        {
+            if (isUpTouch)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                transform.position = new Vector2(transform.position.x, hitboxUp.point.y - (col_y * 0.5f + boxLength * 2f));
+            }
+        }
 
-    void OnDrawGizmos()
-    {
-        if (hitbox.collider != null)
+
+        private void JumpUpdate()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, Vector2.down * hitbox.distance);
-            Gizmos.DrawWireCube(transform.position + Vector3.down * hitbox.distance, boxCastSize);
+            if (Input.GetButtonDown("Jump") && isDownTouch)      // 점프 처리
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                isDownTouch = false;                                 // 점프 시 바닥 고정 해제
+                downCoolTimer = Cooldown;                   // 쿨다운 타이머 시작
+            }
         }
-        else
+        private void CoolTimersUpdate()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(transform.position, Vector2.down * boxCastMaxDistance);
-            Gizmos.DrawWireCube(transform.position + Vector3.down * boxCastMaxDistance, boxCastSize);
+            if (Input.GetKeyDown(KeyCode.A) && isRightTouch)
+            {
+                isRightTouch = false;
+                rightCoolTimer = Cooldown;
+            }
+            if (Input.GetKeyDown(KeyCode.D) && isLeftTouch)
+            {
+                isLeftTouch = false;
+                leftCoolTimer = Cooldown;
+            }
+            if (isUpTouch)
+            {
+                isUpTouch = false;
+                upCoolTimer = Cooldown;
+            }
+
         }
     }
 }
