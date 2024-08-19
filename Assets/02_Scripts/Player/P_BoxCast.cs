@@ -6,8 +6,6 @@ namespace PlayerCtrl
 {
     public partial class Player
     {
-        private float originGravityScale;       // 초기 중력 설정값 저장
-
         private float Cooldown;                 // 해당 시간동안 BoxCast를 사용하지 않음
 
         private float downCoolTimer;            // 아래쪽 BoxCast 타이머 갱신
@@ -15,7 +13,7 @@ namespace PlayerCtrl
         private float rightCoolTimer;           // 오른쪽 BoxCast 타이머 갱신
         private float upCoolTimer;              // 위쪽 BoxCast 타이머 갱신
 
-        public bool isDownTouch;                // 아래쪽 BoxCast 충돌 감지
+        public bool isDownTouch;                // 아래쪽 BoxCast 충돌 감지         충돌 감지 변수 나중에 private으로 변경
         public bool isLeftTouch;                // 왼쪽 BoxCast 충돌 감지
         public bool isRightTouch;               // 오른쪽 BoxCast 충돌 감지
         public bool isUpTouch;                  // 위쪽 BoxCast 충돌 감지
@@ -29,10 +27,10 @@ namespace PlayerCtrl
         private Vector2 boxHorizontalSize;      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
         private Vector2 boxVerticalSize;        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
 
-        public RaycastHit2D hitboxDown;         // 아래쪽 BoxCast
-        public RaycastHit2D hitboxLeft;         // 왼쪽 BoxCast
-        public RaycastHit2D hitboxRight;        // 오른쪽 BoxCast
-        public RaycastHit2D hitboxUp;           // 위쪽 BoxCast
+        private RaycastHit2D hitboxDown;         // 아래쪽 BoxCast
+        private RaycastHit2D hitboxLeft;         // 왼쪽 BoxCast
+        private RaycastHit2D hitboxRight;        // 오른쪽 BoxCast
+        private RaycastHit2D hitboxUp;           // 위쪽 BoxCast
 
         /// <summary> BoxCast를 사용하여 충돌 감지. <para> true = up, false = down </para> </summary>
         private void BoxVerticalCast(ref RaycastHit2D hitbox, ref float coolTimer, ref bool isTouch, bool up)
@@ -65,7 +63,7 @@ namespace PlayerCtrl
                 transform.position = new Vector2(transform.position.x, y);
             }
             else
-                rb.gravityScale = up ? rb.gravityScale : originGravityScale;
+                rb.gravityScale = up ? rb.gravityScale : originalGravityScale;
         }
         /// <summary> BoxCast를 사용하여 충돌 감지. <para> true = right, false = left </para> </summary>
         private void BoxHorizontalCast(ref RaycastHit2D hitbox, ref float coolTimer, ref bool isTouch, bool right)
