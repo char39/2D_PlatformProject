@@ -72,6 +72,7 @@ namespace PlayerCtrl
             velocity = rb.velocity;                                                             // 플레이어의 속도를 할당함. (런타임 수치 확인용)
             horizontal = IsPlayer1p ? playerInput.Horizontal_1p : playerInput.Horizontal_2p;    // 1P 2P에 따라 입력값을 받아옴
             vertical = IsPlayer1p ? playerInput.Vertical_1p : playerInput.Vertical_2p;          // 1P 2P에 따라 입력값을 받아옴
+            hitboxOffset = hitboxOffsetDown + hitboxOffsetLeft + hitboxOffsetRight + hitboxOffsetUp;    // BoxCast가 충돌 거리 안으로 들어간 거리의 합
         }
 
         private void OnDrawGizmos()             // Gizmos 표현

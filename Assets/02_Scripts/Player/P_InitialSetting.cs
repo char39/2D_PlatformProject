@@ -20,7 +20,7 @@ namespace PlayerCtrl
         private void Start_Rigid2D_Set()
         {
             rb.velocity = Vector2.zero;                                                             // 속도 초기화
-            rb.gravityScale = 3.5f;                                                                   // 중력 설정
+            rb.gravityScale = 10f;                                                                   // 중력 설정
             rb.bodyType = RigidbodyType2D.Dynamic;                                                  // Dynamic으로 설정
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;   // 회전 제한 설정
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;                        // 충돌 감지 설정
@@ -36,12 +36,16 @@ namespace PlayerCtrl
             boxMaxDist = 2.0f;                                  // BoxCast를 판별하는 최대 거리
             boxHorizontalSize = new Vector2(col_x, boxLength);      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
             boxVerticalSize = new Vector2(boxLength, col_y);        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
+            hitboxOffsetDown = new Vector2(0f, 0f);         // 아래쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
+            hitboxOffsetLeft = new Vector2(0f, 0f);         // 왼쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
+            hitboxOffsetRight = new Vector2(0f, 0f);        // 오른쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
+            hitboxOffsetUp = new Vector2(0f, 0f);           // 위쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
         }
         /// <summary> 초기 설정. <para> Movement 변수 초기화 </para> </summary>
         private void Start_Movement_Set()
         {
             originalGravityScale = rb.gravityScale;                 // 초기 중력 설정값 저장
-            jumpForce = 20f;
+            jumpForce = 50f;
         }
     }
 }

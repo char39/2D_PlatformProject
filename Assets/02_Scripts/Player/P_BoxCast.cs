@@ -27,26 +27,46 @@ namespace PlayerCtrl
         private Vector2 boxHorizontalSize;      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
         private Vector2 boxVerticalSize;        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
 
-        private RaycastHit2D hitboxDown;         // 아래쪽 BoxCast
-        private RaycastHit2D hitboxLeft;         // 왼쪽 BoxCast
-        private RaycastHit2D hitboxRight;        // 오른쪽 BoxCast
-        private RaycastHit2D hitboxUp;           // 위쪽 BoxCast
+        private RaycastHit2D hitboxDown;        // 아래쪽 BoxCast
+        private RaycastHit2D hitboxLeft;        // 왼쪽 BoxCast
+        private RaycastHit2D hitboxRight;       // 오른쪽 BoxCast
+        private RaycastHit2D hitboxUp;          // 위쪽 BoxCast
+
+        public Vector2 hitboxOffset;           // BoxCast가 충돌 거리 안으로 들어간 거리의 합
+        private Vector2 hitboxOffsetDown;       // 아래쪽 BoxCast가 충돌 거리 안으로 들어간 거리
+        private Vector2 hitboxOffsetLeft;       // 왼쪽 BoxCast가 충돌 거리 안으로 들어간 거리
+        private Vector2 hitboxOffsetRight;      // 오른쪽 BoxCast가 충돌 거리 안으로 들어간 거리
+        private Vector2 hitboxOffsetUp;         // 위쪽 BoxCast가 충돌 거리 안으로 들어간 거리
 
         /// <summary> BoxCast를 사용하여 충돌 감지. <para> true = up, false = down </para> </summary>
         private void BoxVerticalCast(ref RaycastHit2D hitbox, ref float coolTimer, ref bool isTouch, bool up)
         {
             Vector2 direction = up ? Vector2.up : Vector2.down;
+
+            if (up) hitboxOffset = hitboxOffsetDown + hitboxOffsetLeft + hitboxOffsetRight;
+            else    hitboxOffset = hitboxOffsetUp + hitboxOffsetLeft + hitboxOffsetRight;
+
             if (coolTimer > 0)
                 coolTimer -= Time.deltaTime;
             if (coolTimer <= 0)
             {
-                hitbox = Physics2D.BoxCast(transform.position, boxHorizontalSize, 0f, direction, boxMaxDist, layer.Block);
+                hitbox = Physics2D.BoxCast(transform.position + (Vector3)hitboxOffset, boxHorizontalSize, 0f, direction, boxMaxDist, layer.Block);
                 if (hitbox.collider != null)
                 {
                     if (hitbox.distance <= col_y * 0.5f + boxLength * 1.5f)
+                    {
                         isTouch = true;
+                        if (up)
+                            hitboxOffsetUp = new Vector2(0f, -(col_y * 0.5f + boxLength * 1.5f - hitbox.distance));
+                        else
+                            hitboxOffsetDown = new Vector2(0f, col_y * 0.5f + boxLength * 1.5f - hitbox.distance);
+                    }
                     else
+                    {
                         isTouch = false;
+                        hitboxOffsetUp = new Vector2(0f, 0f);
+                        hitboxOffsetDown = new Vector2(0f, 0f);
+                    }
                 }
                 else
                     isTouch = false;
@@ -55,7 +75,7 @@ namespace PlayerCtrl
         /// <summary> BoxCast 충돌 감지 후 위치 고정. <para> true = up, false = down </para> </summary>
         private void VerticalPosLock(RaycastHit2D hitbox, ref bool isTouch, bool up)
         {
-            if (isTouch)
+            if (isTouch && ((up && rb.velocity.y >= 0f) || (!up && rb.velocity.y <= 0f)))
             {
                 rb.gravityScale = up ? rb.gravityScale : 0.0f;
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
@@ -69,17 +89,31 @@ namespace PlayerCtrl
         private void BoxHorizontalCast(ref RaycastHit2D hitbox, ref float coolTimer, ref bool isTouch, bool right)
         {
             Vector2 direction = right ? Vector2.right : Vector2.left;
+
+            if (right)  hitboxOffset = hitboxOffsetLeft + hitboxOffsetUp + hitboxOffsetDown;
+            else        hitboxOffset = hitboxOffsetRight + hitboxOffsetUp + hitboxOffsetDown;
+
             if (coolTimer > 0)
                 coolTimer -= Time.deltaTime;
             if (coolTimer <= 0)
             {
-                hitbox = Physics2D.BoxCast(transform.position, boxVerticalSize, 0f, direction, boxMaxDist, layer.Block);
+                hitbox = Physics2D.BoxCast(transform.position + (Vector3)hitboxOffset, boxVerticalSize, 0f, direction, boxMaxDist, layer.Block);
                 if (hitbox.collider != null)
                 {
                     if (hitbox.distance <= col_x * 0.5f + boxLength * 1.5f)
+                    {
                         isTouch = true;
+                        if (right)
+                            hitboxOffsetRight = new Vector2(-(col_x * 0.5f + boxLength * 1.5f - hitbox.distance), 0f);
+                        else
+                            hitboxOffsetLeft = new Vector2(col_x * 0.5f + boxLength * 1.5f - hitbox.distance, 0f);
+                    }
                     else
+                    {
                         isTouch = false;
+                        hitboxOffsetRight = new Vector2(0f, 0f);
+                        hitboxOffsetLeft = new Vector2(0f, 0f);
+                    }
                 }
                 else
                     isTouch = false;
