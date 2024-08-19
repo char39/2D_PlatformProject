@@ -56,14 +56,19 @@ namespace PlayerCtrl
             JumpUpdate();
 
             CoolTimersUpdate();
-            BoxVerticalCast(ref hitboxUp, ref upCoolTimer, ref isUpTouch, true);                // 위쪽 BoxCast
-            BoxVerticalCast(ref hitboxDown, ref downCoolTimer, ref isDownTouch, false);         // 아래쪽 BoxCast
+
             BoxHorizontalCast(ref hitboxRight, ref rightCoolTimer, ref isRightTouch, true);     // 오른쪽 BoxCast
             BoxHorizontalCast(ref hitboxLeft, ref leftCoolTimer, ref isLeftTouch, false);       // 왼쪽 BoxCast
-            VerticalPosLock(hitboxUp, ref isUpTouch, true);                                 // 위쪽 BoxCast 위치 고정
-            VerticalPosLock(hitboxDown, ref isDownTouch, false);                            // 아래쪽 BoxCast 위치 고정
+            BoxVerticalCast(ref hitboxUp, ref upCoolTimer, ref isUpTouch, true);                // 위쪽 BoxCast
+            BoxVerticalCast(ref hitboxDown, ref downCoolTimer, ref isDownTouch, false);         // 아래쪽 BoxCast
+
+            GetHitboxOffset();
+
             HorizontalPosLock(hitboxRight, ref isRightTouch, true);                         // 오른쪽 BoxCast 위치 고정
             HorizontalPosLock(hitboxLeft, ref isLeftTouch, false);                          // 왼쪽 BoxCast 위치 고정
+            VerticalPosLock(hitboxUp, ref isUpTouch, true);                                 // 위쪽 BoxCast 위치 고정
+            VerticalPosLock(hitboxDown, ref isDownTouch, false);                            // 아래쪽 BoxCast 위치 고정
+
         }
         //----------------------------------------------------------------------------------//
 
@@ -72,17 +77,16 @@ namespace PlayerCtrl
             velocity = rb.velocity;                                                             // 플레이어의 속도를 할당함. (런타임 수치 확인용)
             horizontal = IsPlayer1p ? playerInput.Horizontal_1p : playerInput.Horizontal_2p;    // 1P 2P에 따라 입력값을 받아옴
             vertical = IsPlayer1p ? playerInput.Vertical_1p : playerInput.Vertical_2p;          // 1P 2P에 따라 입력값을 받아옴
-            hitboxOffset = hitboxOffsetDown + hitboxOffsetLeft + hitboxOffsetRight + hitboxOffsetUp;    // BoxCast가 충돌 거리 안으로 들어간 거리의 합
         }
 
         private void OnDrawGizmos()             // Gizmos 표현
         {
             if (HideGizmos || !Application.isPlaying || drawGizmos == null) return;
             drawGizmos.DrawVectorGizmos(tr, rb.velocity, Color.blue);
-            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxRight, boxVerticalSize, col_x, boxLength, boxMaxDist, true);
-            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxLeft, boxVerticalSize, col_x, boxLength, boxMaxDist, false);
-            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxUp, boxHorizontalSize, col_y, boxLength, boxMaxDist, true);
-            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxDown, boxHorizontalSize, col_y, boxLength, boxMaxDist, false);
+            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxRight, hitboxOffsetRightApply, boxVerticalSize, col_x, boxLength, boxMaxDist, true);
+            drawGizmos.DrawHorizontalHitBoxGizmos(tr, hitboxLeft, hitboxOffsetLeftApply, boxVerticalSize, col_x, boxLength, boxMaxDist, false);
+            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxUp, hitboxOffsetUpApply, boxHorizontalSize, col_y, boxLength, boxMaxDist, true);
+            drawGizmos.DrawVerticalHitBoxGizmos(tr, hitboxDown, hitboxOffsetDownApply, boxHorizontalSize, col_y, boxLength, boxMaxDist, false);
         }
     }
 }

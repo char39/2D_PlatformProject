@@ -12,7 +12,7 @@ public class DrawGizmos : MonoBehaviour
     }
 
     /// <summary> 인스턴스의 좌우 충돌 박스를 표현. </summary>
-    public void DrawHorizontalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 boxSize, float col_x, float boxLength, float maxBoxDistance, bool right)
+    public void DrawHorizontalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 hitboxOffset, Vector2 boxSize, float col_x, float boxLength, float maxBoxDistance, bool right)
     {
         Vector2 direction = right ? Vector2.right : Vector2.left;
 
@@ -22,18 +22,18 @@ public class DrawGizmos : MonoBehaviour
                 Gizmos.color = Color.red;
             else
                 Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(tr.position, direction * hitbox.distance);
-            Gizmos.DrawWireCube(tr.position + (Vector3)direction * hitbox.distance, boxSize);
+            Gizmos.DrawRay(tr.position + (Vector3)hitboxOffset, direction * hitbox.distance);
+            Gizmos.DrawWireCube(tr.position + (Vector3)hitboxOffset + (Vector3)direction * hitbox.distance, boxSize);
         }
         else
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(tr.position, direction * maxBoxDistance);
-            Gizmos.DrawWireCube(tr.position + (Vector3)direction * maxBoxDistance, boxSize);
+            Gizmos.DrawRay(tr.position + (Vector3)hitboxOffset, direction * maxBoxDistance);
+            Gizmos.DrawWireCube(tr.position + (Vector3)hitboxOffset + (Vector3)direction * maxBoxDistance, boxSize);
         }
     }
     /// <summary> 인스턴스의 상하 충돌 박스를 표현. </summary>
-    public void DrawVerticalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 boxSize, float col_y, float boxLength, float maxBoxDistance, bool up)
+    public void DrawVerticalHitBoxGizmos(Transform tr, RaycastHit2D hitbox, Vector2 hitboxOffset, Vector2 boxSize, float col_y, float boxLength, float maxBoxDistance, bool up)
     {
         Vector2 direction = up ? Vector2.up : Vector2.down;
 
@@ -43,14 +43,14 @@ public class DrawGizmos : MonoBehaviour
                 Gizmos.color = Color.red;
             else
                 Gizmos.color = Color.yellow;
-            Gizmos.DrawRay(tr.position, direction * hitbox.distance);
-            Gizmos.DrawWireCube(tr.position + (Vector3)direction * hitbox.distance, boxSize);
+            Gizmos.DrawRay(tr.position + (Vector3)hitboxOffset, direction * hitbox.distance);
+            Gizmos.DrawWireCube(tr.position + (Vector3)hitboxOffset + (Vector3)direction * hitbox.distance, boxSize);
         }
         else
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawRay(tr.position, direction * maxBoxDistance);
-            Gizmos.DrawWireCube(tr.position + (Vector3)direction * maxBoxDistance, boxSize);
+            Gizmos.DrawRay(tr.position + (Vector3)hitboxOffset, direction * maxBoxDistance);
+            Gizmos.DrawWireCube(tr.position + (Vector3)hitboxOffset + (Vector3)direction * maxBoxDistance, boxSize);
         }
     }
 

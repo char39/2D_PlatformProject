@@ -20,7 +20,7 @@ namespace PlayerCtrl
         private void Start_Rigid2D_Set()
         {
             rb.velocity = Vector2.zero;                                                             // 속도 초기화
-            rb.gravityScale = 10f;                                                                   // 중력 설정
+            rb.gravityScale = 0f;                                                                   // 중력 설정
             rb.bodyType = RigidbodyType2D.Dynamic;                                                  // Dynamic으로 설정
             rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;   // 회전 제한 설정
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;                        // 충돌 감지 설정
@@ -34,8 +34,8 @@ namespace PlayerCtrl
             Cooldown = 0.05f;                                   // 해당 시간동안 BoxCast를 사용하지 않음 (Cast 무시)
             boxLength = 0.05f;                                  // BoxCast의 두께
             boxMaxDist = 2.0f;                                  // BoxCast를 판별하는 최대 거리
-            boxHorizontalSize = new Vector2(col_x, boxLength);      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
-            boxVerticalSize = new Vector2(boxLength, col_y);        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
+            boxHorizontalSize = new Vector2(col_x * 0.9f, boxLength);      // Vector2(col_x, boxLength). Vertical에서 사용하는 BoxCast
+            boxVerticalSize = new Vector2(boxLength, col_y * 0.9f);        // Vector2(boxLength, col_y). Horizontal에서 사용하는 BoxCast
             hitboxOffsetDown = new Vector2(0f, 0f);         // 아래쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
             hitboxOffsetLeft = new Vector2(0f, 0f);         // 왼쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
             hitboxOffsetRight = new Vector2(0f, 0f);        // 오른쪽 BoxCast가 충돌 거리 안으로 들어간 거리. 초기화
@@ -45,7 +45,7 @@ namespace PlayerCtrl
         private void Start_Movement_Set()
         {
             originalGravityScale = rb.gravityScale;                 // 초기 중력 설정값 저장
-            jumpForce = 50f;
+            jumpForce = 15f;
         }
     }
 }
